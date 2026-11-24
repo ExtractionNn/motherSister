@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для самых родных 💐✨</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fef3c7 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.96);
+            padding: 36px 26px;
+            border-radius: 26px;
+            box-shadow: 0 18px 45px rgba(219, 39, 119, 0.14);
+            text-align: center;
+            max-width: 420px;
+            width: 92%;
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(251, 207, 232, 0.8);
+        }
+
+        .badge {
+            display: inline-block;
+            background: #fdf2f8;
+            color: #db2777;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 5px 14px;
+            border-radius: 50px;
+            margin-bottom: 14px;
+            border: 1px solid #fbcfe8;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .icon {
+            font-size: 56px;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        h1 {
+            color: #831843;
+            font-size: 24px;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        p {
+            color: #6b7280;
+            font-size: 16px;
+            line-height: 1.55;
+            margin-bottom: 24px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            min-height: 50px;
+        }
+
+        button {
+            padding: 13px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            color: white;
+            box-shadow: 0 6px 18px rgba(219, 39, 119, 0.3);
+        }
+
+        .btn-main:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 22px rgba(219, 39, 119, 0.4);
+        }
+
+        .btn-soft {
+            background: #fdf2f8;
+            color: #be185d;
+            border: 1px solid #fbcfe8;
+        }
+
+        .btn-soft:hover {
+            background: #fce7f3;
+        }
+
+        /* Подарочные коробки на 4 экране */
+        .gifts-grid {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .gift-box {
+            width: 86px;
+            height: 86px;
+            background: #fdf2f8;
+            border: 2px dashed #f472b6;
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            user-select: none;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.07);
+            background: #fce7f3;
+        }
+
+        .gift-box.opened {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            font-size: 13px;
+            font-weight: 700;
+            color: #92400e;
+            padding: 6px;
+            line-height: 1.2;
+            cursor: default;
+        }
+
+        .wish-card {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 16px;
+            padding: 18px;
+            color: #78350f;
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 22px;
+        }
+
+        .petal {
+            position: fixed;
+            top: -10vh;
+            font-size: 24px;
+            animation: fall linear forwards;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(115vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- ЭКРАН 1: Выбор кто открыл -->
+        <div class="screen active" id="screen1">
+            <span class="badge">Сюрприз от Саши 💌</span>
+            <span class="icon">🌷</span>
+            <h1>Привет! Кто сейчас открыл эту страницу?</h1>
+            <p>Выбери себя, чтобы сайт настроился специально под тебя:</p>
+            <div class="buttons">
+                <button class="btn-main" onclick="selectRole('mom')">Мама 💐</button>
+                <button class="btn-soft" onclick="selectRole('sis')">Сестра ✨</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 2: Тёплое приветствие -->
+        <div class="screen" id="screen2">
+            <span class="badge" id="roleBadge">Для самой родной</span>
+            <span class="icon" id="roleIcon">💖</span>
+            <h1 id="title2">Сделал это сам для тебя!</h1>
+            <p id="text2">Решил сделать небольшой интерактив вместо обычной картинки в мессенджере. Готова открыть свой сюрприз?</p>
+            <div class="buttons">
+                <button class="btn-main" onclick="goScreen(3)">Конечно, давай →</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 3: Убегающая кнопка -->
+        <div class="screen" id="screen3">
+            <span class="badge">Важный вопрос</span>
+            <span class="icon">🥰</span>
+            <h1 id="title3">Признавайся, я у тебя самый лучший?</h1>
+            <p>Отвечай честно, система всё фиксирует!</p>
+            <div class="buttons">
+                <button class="btn-main" onclick="goScreen(4)">Бесспорно, да! ❤️</button>
+                <button class="btn-soft" id="runawayBtn">Ну, подумаю 😜</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН 4: Открыть 3 подарка -->
+        <div class="screen" id="screen4">
+            <span class="badge">Мини-игра</span>
+            <span class="icon">🎁</span>
+            <h1>Открой все три подарка</h1>
+            <p>Нажми на каждую коробочку, чтобы забрать пожелания:</p>
+            <div class="gifts-grid">
+                <div class="gift-box" onclick="openGift(this, 'Крепкого здоровья 💪')">🎁</div>
+                <div class="gift-box" onclick="openGift(this, 'Побольше улыбок 😊')">🎁</div>
+                <div class="gift-box" onclick="openGift(this, 'Исполнения мечт ✨')">🎁</div>
+            </div>
+            <button class="btn-main" id="toFinalBtn" style="display: none;" onclick="showFinal()">Открыть главный финал →</button>
+        </div>
+
+        <!-- ЭКРАН 5: Персональный финал -->
+        <div class="screen" id="screen5">
+            <span class="badge">От всего сердца ❤️</span>
+            <span class="icon" id="finalIcon">💐</span>
+            <h1 id="finalTitle">Люблю тебя!</h1>
+            <div class="wish-card" id="finalWish"></div>
+            <div class="buttons">
+                <button class="btn-soft" onclick="restart()">Пройти сначала 🔄</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'mom';
+        let openedCount = 0;
+        let heartInterval = null;
+
+        const content = {
+            mom: {
+                badge: 'Для любимой мамы 💐',
+                icon: '💐',
+                title2: 'Мамуль, это специально для тебя!',
+                text2: 'Просто захотелось поднять тебе настроение и напомнить, как сильно я тебя ценю. Нажимай дальше!',
+                title3: 'Правда же, что у тебя самый лучший сын?',
+                finalIcon: '🌹💖',
+                finalTitle: 'Мама, спасибо тебе за всё!',
+                finalWish: 'Желаю тебе крепкого здоровья, спокойствия на душе и побольше поводов для искренней улыбки каждый день. Ты самая лучшая мама на свете, очень тебя люблю!'
+            },
+            sis: {
+                badge: 'Для лучшей сестры ✨',
+                icon: '✨',
+                title2: 'Привет, сестрёнка!',
+                text2: 'Сделал для тебя небольшую интерактивную открытку, чтобы ты улыбнулась прямо сейчас.',
+                title3: 'Признавайся, у тебя же самый крутой брат?',
+                finalIcon: '🦋💖',
+                finalTitle: 'Ты у меня самая классная!',
+                finalWish: 'Пусть у тебя всегда всё получается легко, настроение будет на высоте, а рядом будут только крутые люди. Всегда знай, что я рядом и поддержу!'
+            }
+        };
+
+        function selectRole(role) {
+            currentRole = role;
+            const data = content[role];
+            document.getElementById('roleBadge').innerText = data.badge;
+            document.getElementById('roleIcon').innerText = data.icon;
+            document.getElementById('title2').innerText = data.title2;
+            document.getElementById('text2').innerText = data.text2;
+            document.getElementById('title3').innerText = data.title3;
+            document.getElementById('finalIcon').innerText = data.finalIcon;
+            document.getElementById('finalTitle').innerText = data.finalTitle;
+            document.getElementById('finalWish').innerText = data.finalWish;
+            goScreen(2);
+        }
+
+        function goScreen(num) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const runBtn = document.getElementById('runawayBtn');
+            if (runBtn) runBtn.style.position = 'static';
+            document.getElementById('screen' + num).classList.add('active');
+        }
+
+        // Убегающая кнопка на 3 экране
+        const runBtn = document.getElementById('runawayBtn');
+        function dodge() {
+            const maxX = window.innerWidth - runBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - runBtn.offsetHeight - 20;
+            const x = Math.max(10, Math.floor(Math.random() * maxX));
+            const y = Math.max(10, Math.floor(Math.random() * maxY));
+            runBtn.style.position = 'fixed';
+            runBtn.style.left = x + 'px';
+            runBtn.style.top = y + 'px';
+        }
+        runBtn.addEventListener('mouseover', dodge);
+        runBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            dodge();
+        });
+
+        // Открытие подарков на 4 экране
+        function openGift(el, text) {
+            if (el.classList.contains('opened')) return;
+            el.classList.add('opened');
+            el.innerText = text;
+            openedCount++;
+            if (openedCount >= 3) {
+                document.getElementById('toFinalBtn').style.display = 'inline-block';
+            }
+        }
+
+        function showFinal() {
+            goScreen(5);
+            if (!heartInterval) {
+                heartInterval = setInterval(spawnPetal, 260);
+            }
+        }
+
+        function spawnPetal() {
+            const el = document.createElement('div');
+            el.classList.add('petal');
+            const items = ['💐', '❤️', '✨', '🌷', '💖'];
+            el.innerText = items[Math.floor(Math.random() * items.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = (Math.random() * 2 + 2.8) + 's';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 4800);
+        }
+
+        function restart() {
+            openedCount = 0;
+            document.getElementById('toFinalBtn').style.display = 'none';
+            document.querySelectorAll('.gift-box').forEach(box => {
+                box.classList.remove('opened');
+                box.innerText = '🎁';
+            });
+            goScreen(1);
+        }
+    </script>
+</body>
+</html>
